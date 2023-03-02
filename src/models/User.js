@@ -38,13 +38,8 @@ module.exports = (sequelize,DataTypes) =>{
                 console.log(err)
                 console.log('The data is: ' + password)
                 console.log('The hash is: ' + this.password)
-            } else if (result == false){
-                console.log('the password validity was false')
-                console.log(this.password)
-                const salt = bcrypt.genSaltSync(8)
-                const hash = bcrypt.hashSync(password,salt)
-                console.log(hash)
             }
+            console.log(result)
         })
     }
 

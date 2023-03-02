@@ -1,1 +1,1 @@
-This is a temporary repository for my PEVN stack application server side. I'm creating this because bcrypt.compare always returns false when comparing the plain text password which is always the same with a hashed password from my PostgreSQL database
+This is a temporary repository for my PEVN stack application server side. I'm creating this because bcrypt.compare always returns false when comparing the plain text password which is always the same with a hashed password from my PostgreSQL database. The login issue lies within 'ArgumentController.js' and 'User.js'
