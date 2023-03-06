@@ -1,20 +1,16 @@
-const { genSalt } = require('bcrypt')
-const bluebird = require('bluebird')
-const bcrypt = bluebird.promisifyAll(require('bcrypt'))
+const crypto = require('crypto')
 
 
 async function hashPassword (user){
-    const SALT_FACTOR = 8
-
     if(!user.changed('password')){
+        console.log('The password was changed')
         return
     }
-    console.log('hellow')
-
-    const salt = await bcrypt.genSalt(SALT_FACTOR)
-    const hash = await bcrypt.hash(user.password, salt)
-    const hashedPassword = user.setDataValue('password',hash)
-    return hashedPassword
+    user.salt = crypto.randomBytes(16).toString('hex')
+    console.log('The salt entered into the database was ' + user.salt)
+    const hash = crypto.pbkdf2Sync(user.password,user.salt,1000,64,'sha512')
+    .toString('hex')
+    user.password = hash
 }
 
 module.exports = (sequelize,DataTypes) =>{
@@ -23,24 +19,24 @@ module.exports = (sequelize,DataTypes) =>{
             type: DataTypes.STRING,
             unique: true
         },
-        password: DataTypes.STRING
+        password: DataTypes.STRING,
+        salt: DataTypes.STRING
     },{
         hooks:{
-            beforeCreate: hashPassword,
-            beforeUpdate: hashPassword,
             beforeSave: hashPassword
         }
     })
 
     User.prototype.comparePassword = function (password)  {
-        return bcrypt.compareSync(password, this.password, (err,result)=>{
-            if(err){
-                console.log(err)
-                console.log('The data is: ' + password)
-                console.log('The hash is: ' + this.password)
-            }
-            console.log(result)
-        })
+        const hash = crypto.pbkdf2Sync(password,this.salt,1000,64,'sha512').toString('hex')
+        result = hash === this.password
+        if(!result){
+            console.log(password)
+            console.log(this.password)
+            console.log(hash)
+            console.log(this.salt)
+        }
+        return hash === this.password
     }
 
     return User;
