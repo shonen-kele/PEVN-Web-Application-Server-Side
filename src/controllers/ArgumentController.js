@@ -4,13 +4,14 @@ module.exports = {
     async createArgument(req,res){
 
         //Returning the count of arguments under a particular user
-        const argumentCount = db.sequelize.models.Argument.count({
+        const argumentCount = await db.sequelize.models.Argument.count({
             where:{email:req.body.email}
         })
-        const argumentInstance = db.sequelize.models.Argument.findOne({where:{
+        const argumentInstance = await db.sequelize.models.Argument.findOne({where:{
             title:req.body.title,
             email:req.body.email
         }})
+        console.log('The argument instance is ' + argumentInstance)
 
         if(argumentInstance == null){
             await db.sequelize.models.Argument.create({
@@ -19,6 +20,7 @@ module.exports = {
                 argument: req.body.argument,
                 argumentIndex: argumentCount+1
             })
+            res.json({message:'you have entered the argmument'})
         } else {
             res.json({error:'You have already made this argument'})
         }

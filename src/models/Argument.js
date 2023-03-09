@@ -4,7 +4,7 @@ module.exports = (sequelize,DataTypes) =>{
             type: DataTypes.STRING,
         },
         title: DataTypes.STRING,
-        argumentBody: DataTypes.STRING,
+        argument: DataTypes.STRING(5000),
         argumentIndex: DataTypes.INTEGER //to count how many arguments the user has
     })
     return Argument

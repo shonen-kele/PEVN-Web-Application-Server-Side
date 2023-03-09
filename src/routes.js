@@ -21,8 +21,8 @@ module.exports = (app) =>{
         AuthenticationController.deleteAccount(req,res)
     }),
 
-    app.post('/createAccount',(req,res)=>{
-        error = ArgumentControllerPolicy.createArgument(req,res)
+    app.post('/createArgument',(req,res)=>{
+        const error = ArgumentControllerPolicy.createArgument(req,res)
         if(!error){
             ArgumentController.createArgument(req,res)
         }

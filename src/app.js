@@ -12,6 +12,6 @@ app.use(cors()) //To make it available with the client (security risk)
 
 require("./routes.js")(app)
 
-db.sequelize.sync().then(
+db.sequelize.sync({alter: true}).then(
     app.listen(8080,()=>{console.log("The server has started")})
 )
