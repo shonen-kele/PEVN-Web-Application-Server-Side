@@ -29,5 +29,8 @@ module.exports = (app) =>{
     }),
     app.post('/destroyArgument',(req,res)=>{
         ArgumentController.destroyArgument(req,res)
+    }),
+    app.post('/displayPersonalArguments',(req,res)=>{
+        ArgumentController.displayPersonalArguments(req,res)
     })
 }

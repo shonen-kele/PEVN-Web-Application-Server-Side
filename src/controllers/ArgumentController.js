@@ -37,5 +37,14 @@ module.exports = {
             argumentInstance.destroy()
             res.json({message:'The argument was destroyed'})
         }
+    },
+    async displayPersonalArguments(req,res){
+        const argumentInstances = await db.sequelize.models.Argument.findAll({where:{email:req.body.email}})
+        
+        if(argumentInstances.length == 0){
+            res.json({message:'You have made no arguments'})
+        } else{
+            res.json({arguments:argumentInstances})
+        }
     }
 }
