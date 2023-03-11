@@ -28,13 +28,12 @@ module.exports = {
     async destroyArgument(req,res){
         const argumentInstance = await db.sequelize.models.Argument.findOne
         ({where:{
-            title:req.body.title,
-            email:req.body.email
+            id:req.body.id
         }})
         if(argumentInstance == null){
             res.json({error:'The argument does not exist'})
         } else {
-            argumentInstance.destroy()
+            await argumentInstance.destroy()
             res.json({message:'The argument was destroyed'})
         }
     },
