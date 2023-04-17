@@ -5,32 +5,56 @@ const ArgumentController = require('./controllers/ArgumentController.js')
 const ArgumentControllerPolicy = require('./policies/ArgumentControllerPolicy.js')
 
 module.exports = (app) =>{
-    app.post("/register",(req,res) => {
-        const error = AuthenticationControllerPolicy.register(req,res)
+    //login
+    app.post("/login",(req,res) => {
+        const error = AuthenticationControllerPolicy.registerPolicy(req,res)
         if(!error){
             AuthenticationController.register(req,res)
         }
     }),
-    app.post("/login",(req,res)=>{
-        const error = AuthenticationControllerPolicy.login(req,res)
+    //register
+    app.post("/register",(req,res)=>{
+        const error = AuthenticationControllerPolicy.loginPolicy(req,res)
         if(!error){
             AuthenticationController.login(req,res)
         }
     }),
-    app.post('/deleteAccount',(req,res)=>{
+    //delete one account
+    app.delete('/users/:id',(req,res)=>{
         AuthenticationController.deleteAccount(req,res)
     }),
-
-    app.post('/createArgument',(req,res)=>{
-        const error = ArgumentControllerPolicy.createArgument(req,res)
+    //create argument
+    app.post('/arguments',(req,res)=>{
+        const error = ArgumentControllerPolicy.createArgumentPolicy(req,res)
         if(!error){
             ArgumentController.createArgument(req,res)
         }
     }),
-    app.post('/destroyArgument',(req,res)=>{
+    //delete one argument
+    app.delete('/arguments/:id',(req,res)=>{
         ArgumentController.destroyArgument(req,res)
     }),
-    app.post('/displayPersonalArguments',(req,res)=>{
-        ArgumentController.displayPersonalArguments(req,res)
+    //get all arguments
+    app.get('/arguments',(req,res)=>{
+        ArgumentController.displayArguments(req,res)
+    }),
+    //get one argument
+    app.get('/arguments/:id',(req,res)=>{
+
+    }),
+    //update argument
+    app.put('/arguments/:id',(req,res)=>{
+        ArgumentController.editArgument(req,res)
+    }),
+    //update one user watch
+    app.put('/users/:id/watch',(req,res)=>{
+        ArgumentController.watchArgument(req,res)
+    }),
+    //get verification
+    app.post('verification',(req,res)=>{
+        AuthenticationController.verifyToken(req,res)
+    }),
+    app.get('/users/:id/watch',(req,res)=>{
+        ArgumentController.getWatchedId(req,res)
     })
 }
