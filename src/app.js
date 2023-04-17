@@ -3,7 +3,7 @@ const morgan = require("morgan")
 const bodyParser = require("body-parser")
 const cors = require("cors")
 const DataTypes = require("sequelize")
-const db = require("./models")
+const db = require("./models/index.js")
 
 const app = express()
 app.use(morgan("combine")) //Creates morgan logs

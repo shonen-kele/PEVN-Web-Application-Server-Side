@@ -1,5 +1,5 @@
 module.exports = (sequelize,DataTypes) =>{
-    Argument = sequelize.define("Argument",{
+    const Argument = sequelize.define("Argument",{
         email:{
             type: DataTypes.STRING,
         },
