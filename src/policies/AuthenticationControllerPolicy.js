@@ -43,14 +43,14 @@ function registerPolicy (req,res){
     }
 }
 function loginPolicy (req,res){
-    if (req.query.email == undefined){
+    if (req.body.email == undefined){
         res.json({
             errorMessage:'You have not entered an email'
         })
         return true
     }
     const email = Joi.string().email()
-    const {error} = email.validate(req.query.email)
+    const {error} = email.validate(req.body.email)
     if(error){
         res.json({errorMessage:'What you provided was not the format of an email'})
         return true

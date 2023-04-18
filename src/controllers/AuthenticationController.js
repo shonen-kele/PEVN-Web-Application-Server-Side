@@ -27,14 +27,14 @@ async function register (req,res){
     }
 }
 async function login (req,res){
-    const userInstance = await db.sequelize.models.User.findOne({where:{email:req.query.email}})
+    const userInstance = await db.sequelize.models.User.findOne({where:{email:req.body.email}})
     
     if (userInstance === null) {
         res.json({
             errorMessage:'The email is not in the database'
         })
     } else {
-        const isPasswordValid = await userInstance.comparePassword(req.query.password)
+        const isPasswordValid = await userInstance.comparePassword(req.body.password)
         if (!isPasswordValid) {
             res.json({
                 errorMessage:'The password was incorrect'
@@ -52,8 +52,8 @@ async function login (req,res){
     
 }
 async function deleteAccount(req,res){
-    const userInstance = await db.sequelize.models.User.findOne({where:{email:req.query.email}})
-    const isPasswordValid = await userInstance.comparePassword(req.query.password)
+    const userInstance = await db.sequelize.models.User.findOne({where:{email:req.body.email}})
+    const isPasswordValid = await userInstance.comparePassword(req.body.password)
     if (!isPasswordValid) {
         res.json({
             errorMessage:'You have entered the wrong password'
@@ -67,7 +67,7 @@ async function verifyToken(req,res){
     let verified
     let decoded
     let exp
-    jwt.verify(req.query.token, process.env.JWT_SECRET,function(err,result){
+    jwt.verify(req.body.token, process.env.JWT_SECRET,function(err,result){
         if(!err){
             decoded = result
             exp = result.exp

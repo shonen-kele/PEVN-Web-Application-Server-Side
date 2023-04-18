@@ -6,21 +6,21 @@ const ArgumentControllerPolicy = require('./policies/ArgumentControllerPolicy.js
 
 module.exports = (app) =>{
     //login
-    app.post("/login",(req,res) => {
+    app.post("/register",(req,res) => {
         const error = AuthenticationControllerPolicy.registerPolicy(req,res)
         if(!error){
             AuthenticationController.register(req,res)
         }
     }),
     //register
-    app.post("/register",(req,res)=>{
+    app.post("/login",(req,res)=>{
         const error = AuthenticationControllerPolicy.loginPolicy(req,res)
         if(!error){
             AuthenticationController.login(req,res)
         }
     }),
     //delete one account
-    app.delete('/users/:id',(req,res)=>{
+    app.post('/deleteAccount',(req,res)=>{
         AuthenticationController.deleteAccount(req,res)
     }),
     //create argument
@@ -47,14 +47,14 @@ module.exports = (app) =>{
         ArgumentController.editArgument(req,res)
     }),
     //update one user watch
-    app.put('/users/:id/watch',(req,res)=>{
+    app.put('/users/:email/watch',(req,res)=>{
         ArgumentController.watchArgument(req,res)
     }),
     //get verification
-    app.post('verification',(req,res)=>{
+    app.post('/verification',(req,res)=>{
         AuthenticationController.verifyToken(req,res)
     }),
-    app.get('/users/:id/watch',(req,res)=>{
+    app.get('/users/:email/watch',(req,res)=>{
         ArgumentController.getWatchedId(req,res)
     })
 }

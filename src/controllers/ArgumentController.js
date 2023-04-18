@@ -26,7 +26,7 @@ async function createArgument(req,res){
 async function destroyArgument(req,res){
     const argumentInstance = await db.sequelize.models.Argument.findOne
     ({where:{
-        id:req.query.id
+        id:req.params.id
     }})
     if(argumentInstance == null){
         res.json({errorMessage:'The argument does not exist'})
@@ -38,7 +38,7 @@ async function destroyArgument(req,res){
 
 async function editArgument(req,res){
     //TODO: Make it acceptable for axios and express
-    const argumentInstance = await db.sequelize.models.Argument.findOne({where:{id:req.query.id}})
+    const argumentInstance = await db.sequelize.models.Argument.findOne({where:{id:req.params.id}})
     if(argumentInstance){
         await argumentInstance.update({title:query.title})
         await argumentInstance.update({argument:query.argument})
@@ -48,6 +48,7 @@ async function editArgument(req,res){
     }
 }
 async function displayArguments(req,res){
+    console.log(req.query.email)
     if(req.query.email){
         console.log('logging req.query',req.query)
         const argumentInstances = await db.sequelize.models.Argument.findAll({where:{email:req.query.email}})
@@ -57,9 +58,9 @@ async function displayArguments(req,res){
         } else{
             res.json({arguments:argumentInstances})
         }
-    } else if(req.query.id && typeof(req.query.id)=='number'){
+    } else if(req.params.id){
         const argumentInstance = await db.sequelize.models.Argument.findOne({
-            where:{id:req.query.id}
+            where:{id:req.params.id}
         })
         if(argumentInstance){
             res.json({
@@ -72,10 +73,10 @@ async function displayArguments(req,res){
                 errorMessage:`The argument with id ${id} does not exist or there was an internal error`
             })
         }
-    } else if(req.query.id && typeof(req.query.id)=='object'){
+    } else if(req.query.id){
         const argumentInstances = await db.sequelize.models.Argument.findAll({where:{id:req.query.id}})
         res.json({arguments:argumentInstances})
-    } else if(req.query.id==null){
+    } else if(req.query.id===null){
         res.json({errorMessage:'You have saved no arguments'})
     }else {
         const {rows} = await db.sequelize.models.Argument.findAndCountAll({
@@ -102,9 +103,11 @@ async function watchArgument(req,res){
     }
 }
 async function getWatchedId(req,res){
-    const userInstance = db.sequelize.models.User.findOne({
-        where:{email:req.query.email}
+    console.log('logging req.params.email',req.params.email)
+    const userInstance = await db.sequelize.models.User.findOne({
+        where:{email:req.params.email}
     })
+    console.log('logging userInstance',userInstance)
     res.json({watchedId:userInstance.savedId})
 }
 
@@ -113,5 +116,6 @@ module.exports = {
     displayArguments,
     editArgument,
     destroyArgument,
-    createArgument
+    createArgument,
+    getWatchedId
 }
